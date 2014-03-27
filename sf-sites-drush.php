@@ -9,21 +9,23 @@
 include __DIR__ . '/lib/colors.php';
 
 $script = basename($argv[0]);
-if (empty($argv[3])) {
+if (empty($argv[4])) {
   echo "Usage: $script drush-script sitegroup environment\n";
   exit(1);
 }
 
 $script = $argv[1];
 $sitegroup = $argv[2];
-$environment = empty($argv[3]) ? '01_live' : $argv[3];
-$interval = empty($argv[4]) ? 1 : $argv[4];
+$environment = $argv[3];
+$domain_suffix = $argv[4];
+$interval = empty($argv[5]) ? 1 : $argv[5];
 
-$data = date('YmdHi');
+$date = date('YmdHi');
 $log_dir = '/tmp';
 $log_file = "${log_dir}/${script}-${date}.csv";
 $drush_script = __DIR__ . "/scripts/${script}.php";
 $json_file = "/mnt/gfs/${sitegroup}.${environment}/files-private/sites.json";
+$json_file = '/Users/psynaptic/Desktop/sites.json';
 
 if (!is_writable($log_dir)) {
   echo "${red}${log_dir} not writable${reset}\n";
@@ -37,12 +39,16 @@ if (!file_exists($json_file)) {
 
 $json = file_get_contents($json_file);
 $site_data = json_decode($json, true);
-$sites = array_keys($site_data['sites']);
+$domains = array_keys($site_data['sites']);
+$sites = array_filter($domains, function($data) use ($domain_suffix) {
+  return substr($data, -strlen($domain_suffix)) === $domain_suffix;
+});
 
 foreach ($sites as $uri) {
-  $result = shell_exec("/usr/bin/env drush @${sitegroup}.${environment} php-script $drush_script --uri=$uri");
+$result = shell_exec("/usr/bin/env drush php-script $drush_script --uri=$uri --root=/var/www/html/${sitegroup}.${environment}/docroot");
   $output = "${sitegroup},${environment},${uri},${result}\n";
   file_put_contents($log_file, $output);
   echo $output;
+  sleep($interval);
 }
 
