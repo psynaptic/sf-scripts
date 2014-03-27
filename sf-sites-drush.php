@@ -52,7 +52,7 @@ $root = "/var/www/html/${sitegroup}.${environment}/docroot";
 foreach ($sites as $uri) {
   $result = shell_exec("/usr/bin/env drush php-script $drush_script --uri=$uri --root=$root");
   $output = "${sitegroup},${environment},${uri},${result}\n";
-  file_put_contents($log_file, $output);
+  file_put_contents($log_file, $output, FILE_APPEND);
   echo $output;
   sleep($interval);
 }
