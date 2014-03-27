@@ -6,10 +6,7 @@
  * Returns the value of system.status for a given module.
  */
 
-// @todo Figure out how to pass arguments to the script.
-#$name = drush_shift();
-$name = 'gardens';
+$media_gallery = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => 'media_gallery'))->fetchField();
+$colorbox = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => 'colorbox'))->fetchField();
 
-$status = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => $name))->fetchField();
-echo $status;
-
+echo "$media_gallery,$colorbox";

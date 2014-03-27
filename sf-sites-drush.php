@@ -26,6 +26,11 @@ $log_file = "${log_dir}/${script}-${date}.csv";
 $drush_script = __DIR__ . "/scripts/${script}.php";
 $json_file = "/mnt/gfs/${sitegroup}.${environment}/files-private/sites.json";
 
+if (!file_exists($drush_script)) {
+  echo "${red}${drush_script} not found${reset}\n";
+  exit(1);
+}
+
 if (!is_writable($log_dir)) {
   echo "${red}${log_dir} not writable${reset}\n";
   exit(1);
@@ -43,8 +48,9 @@ $sites = array_filter($domains, function($data) use ($domain_suffix) {
   return substr($data, -strlen($domain_suffix)) === $domain_suffix;
 });
 
+$root = "/var/www/html/${sitegroup}.${environment}/docroot";
 foreach ($sites as $uri) {
-$result = shell_exec("/usr/bin/env drush php-script $drush_script --uri=$uri --root=/var/www/html/${sitegroup}.${environment}/docroot");
+  $result = shell_exec("/usr/bin/env drush php-script $drush_script --uri=$uri --root=$root");
   $output = "${sitegroup},${environment},${uri},${result}\n";
   file_put_contents($log_file, $output);
   echo $output;
