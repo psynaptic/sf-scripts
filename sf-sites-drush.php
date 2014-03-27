@@ -25,7 +25,6 @@ $log_dir = '/tmp';
 $log_file = "${log_dir}/${script}-${date}.csv";
 $drush_script = __DIR__ . "/scripts/${script}.php";
 $json_file = "/mnt/gfs/${sitegroup}.${environment}/files-private/sites.json";
-$json_file = '/Users/psynaptic/Desktop/sites.json';
 
 if (!is_writable($log_dir)) {
   echo "${red}${log_dir} not writable${reset}\n";
