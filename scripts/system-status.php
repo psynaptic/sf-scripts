@@ -6,7 +6,7 @@
  * Returns the value of system.status for a given module.
  */
 
-$media_gallery = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => 'media_gallery'))->fetchField();
-$colorbox = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => 'colorbox'))->fetchField();
+$name = drush_shift();
+$status = db_query('SELECT status FROM {system} WHERE name = :name', array(':name' => $name))->fetchField();
 
-echo "$media_gallery,$colorbox";
+echo $status;
