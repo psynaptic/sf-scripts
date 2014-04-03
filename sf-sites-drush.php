@@ -11,7 +11,8 @@ include __DIR__ . '/lib/colors.php';
 $script = basename($argv[0]);
 if (empty($argv[4])) {
   echo "Usage: $script drush-script sitegroup environment domain-suffix\n";
-  echo "Example: $script ./scripts/script.php tangle001 prod drupalgardens.com\n";
+  echo "Example: $script audit-colorbox-settings tangle001 prod drupalgardens.com\n";
+  echo "Hint: The script should exist at /path/to/sf-scripts/scripts/audit-colorbox-settings.php\n";
   exit(1);
 }
 
