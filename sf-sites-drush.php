@@ -10,7 +10,8 @@ include __DIR__ . '/lib/colors.php';
 
 $script = basename($argv[0]);
 if (empty($argv[4])) {
-  echo "Usage: $script drush-script sitegroup environment\n";
+  echo "Usage: $script drush-script sitegroup environment domain-suffix\n";
+  echo "Example: $script ./scripts/script.php tangle001 prod drupalgardens.com\n";
   exit(1);
 }
 
